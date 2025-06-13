@@ -1,0 +1,31 @@
+name: Fetch tasas de cambio
+
+on:
+  schedule:
+    - cron: '0 18 * * *'  # Todos los días a las 18:00 UTC
+  workflow_dispatch:      # Permite ejecutarlo manualmente
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Instalar requests
+        run: pip install requests
+
+      - name: Ejecutar script
+        run: python fetch_tasas.py
+
+      - name: Commit y push de resultados
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add tasas_cambio.csv
+          git commit -m "Actualización diaria de tasas"
+          git push
