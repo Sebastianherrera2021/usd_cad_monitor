@@ -52,13 +52,24 @@ def inicializar_db():
 def guardar_tasas(tasas):
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
+
+    # Extraer solo la fecha (YYYY-MM-DD)
+    fecha = tasas['timestamp'].split(' ')[0]
+
+    # Borrar el registro anterior del mismo día si existe
+    cursor.execute("DELETE FROM tasas WHERE date(timestamp) = ?", (fecha,))
+
+    # Insertar el nuevo registro
     cursor.execute("""
         INSERT INTO tasas (timestamp, usd_cad, usd_cop, cad_cop)
         VALUES (?, ?, ?, ?)
     """, (tasas['timestamp'], tasas['usd_cad'], tasas['usd_cop'], tasas['cad_cop']))
+
     conn.commit()
     conn.close()
-    print(f"✅ Datos guardados en la base de datos: {tasas}")
+
+    print(f"✅ Registro actualizado para {fecha}: {tasas}")
+
 
 def guardar_csv(tasas):
     crear_encabezado = False
