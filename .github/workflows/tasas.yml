@@ -22,10 +22,10 @@ jobs:
       - name: Ejecutar script
         run: python fetch_tasas.py
 
-      - name: Commit y push de resultados
+      - name: Commit y push de tasas actualizadas
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add tasas_cambio.csv
-          git commit -m "Actualización diaria de tasas"
+          git commit -m "Actualización automática de tasas: $(date)" || echo "No hay cambios para commitear"
           git push
