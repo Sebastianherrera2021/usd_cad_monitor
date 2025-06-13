@@ -2,7 +2,7 @@ name: Fetch tasas de cambio
 
 on:
   schedule:
-    - cron: '0 18 * * *'  # Todos los días a las 18:00 UTC
+    - cron: '23 23 * * *'  # Todos los días a las 18:00 UTC
   workflow_dispatch:      # Permite ejecutarlo manualmente
 
 jobs:
