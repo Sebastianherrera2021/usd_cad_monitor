@@ -1,7 +1,7 @@
 import requests
 import sqlite3
 import csv
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
 ACCESS_KEY = 'd75106e3fef1d76416c4a92afd6a9a48'
 DB_NAME = 'tasas.db'
@@ -18,7 +18,9 @@ def obtener_tasas():
             usd_cad = data['quotes']['USDCAD']
             usd_cop = data['quotes']['USDCOP']
             cad_cop = usd_cop / usd_cad
-            timestamp = datetime.fromtimestamp(data['timestamp']).strftime('%Y-%m-%d %H:%M:%S')
+            
+            colombia_tz = timezone(timedelta(hours=-5))
+            timestamp = datetime.fromtimestamp(data['timestamp'], tz=timezone.utc).astimezone(colombia_tz).strftime('%Y-%m-%d %H:%M:%S')
 
             return {
                 'timestamp': timestamp,
